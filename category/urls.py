@@ -1,7 +1,10 @@
-from django.contrib import admin
-from django.urls import path
-from category.views import get
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import CategoryViewSet
+
+router = DefaultRouter()
+router.register(r'', CategoryViewSet, basename='category')
 
 urlpatterns = [
-    path('', get),
+    path('', include(router.urls)),
 ]

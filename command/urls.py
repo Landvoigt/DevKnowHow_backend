@@ -1,11 +1,22 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import CommandViewSet
-
-router = DefaultRouter()
-router.register(r'command', CommandViewSet)
+from django.urls import path
+from .views import CommandAdminViewSet, CommandViewSet
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('admin', CommandViewSet.as_view({'post': 'admin'}), name='command_admin'),
+    path('', CommandViewSet.as_view({
+        'get': 'list',
+        'post': 'create',
+        'put': 'update',
+        'patch': 'partial_update',
+        'delete': 'destroy',
+        'retrieve': 'retrieve'
+    }), name='command-list'),
+
+    path('admin/', CommandAdminViewSet.as_view({
+        'get': 'list',
+        'post': 'create',
+        'put': 'update',
+        'patch': 'partial_update',
+        'delete': 'destroy',
+        'retrieve': 'retrieve'
+    }), name='command-admin'),
 ]

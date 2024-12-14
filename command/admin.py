@@ -1,3 +1,9 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Command
+
+
+class CommandAdmin(admin.ModelAdmin):
+    list_display = ('id', 'active', 'command', 'category', 'example', 'creation_date')
+
+admin.site.register(Command, CommandAdmin)

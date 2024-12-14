@@ -10,7 +10,7 @@ class Command(models.Model):
     sub_category = models.CharField(max_length=255, blank=True, null=True)
     description = models.CharField(max_length=10000)
     example = models.TextField(max_length=2000, blank=True, null=True)
-    param = models.CharField(max_length=10, blank=True, null=True)
+    param = models.CharField(max_length=255, blank=True, null=True)
     active = models.BooleanField(default=False)
     creation_date = models.DateTimeField(default=timezone.now)
     creator_name = models.CharField(max_length=255)
