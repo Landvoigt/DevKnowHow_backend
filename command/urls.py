@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import CommandAdminViewSet, CommandViewSet
+from .views import CommandAdminViewSet, CommandViewSet, CommandsByCategoryViewSet
 
 urlpatterns = [
     path('', CommandViewSet.as_view({
@@ -19,4 +19,6 @@ urlpatterns = [
         'delete': 'destroy',
         'retrieve': 'retrieve'
     }), name='command-admin'),
+
+    path('category/<int:category_id>/', CommandsByCategoryViewSet.as_view(), name='commands-by-category'),
 ]
