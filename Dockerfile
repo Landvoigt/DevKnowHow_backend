@@ -17,6 +17,4 @@ ENV DJANGO_SETTINGS_MODULE=knowledge_base.settings
 ENV PYTHONUNBUFFERED=1
 ENV DEBUG=False
 
-# CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
-RUN python3 manage.py collectstatic --noinput
-CMD ["gunicorn", "knowledge_base.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3"]
+ENTRYPOINT ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn knowledge_base.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
