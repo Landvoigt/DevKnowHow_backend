@@ -11,10 +11,12 @@ class Command(models.Model):
     description = models.CharField(max_length=10000)
     example = models.TextField(max_length=2000, blank=True, null=True)
     param = models.CharField(max_length=255, blank=True, null=True)
+    tooltip = models.CharField(max_length=1000, blank=True, null=True)
     active = models.BooleanField(default=False)
+    
     creation_date = models.DateTimeField(default=timezone.now)
-    creator_name = models.CharField(max_length=255)
-    creator_email = models.CharField(max_length=255)
+    creator_name = models.CharField(max_length=255, blank=True, null=True)
+    creator_email = models.CharField(max_length=255, blank=True, null=True)
     creator_message = models.CharField(max_length=10000, blank=True, null=True)
 
     def __str__(self):
