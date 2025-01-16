@@ -12,14 +12,13 @@ class Command(models.Model):
     description = models.TextField(max_length=10000)
     example = models.CharField(max_length=2000, blank=True, null=True)
     tooltip = models.CharField(max_length=1000, blank=True, null=True)
-    param = models.CharField(max_length=255, blank=True, null=True)
     
     creation_date = models.DateTimeField(default=timezone.now)
     creator_name = models.CharField(max_length=255, blank=True, null=True)
     creator_email = models.CharField(max_length=255, blank=True, null=True)
     creator_message = models.CharField(max_length=10000, blank=True, null=True)
 
-    copyCount = models.BigIntegerField(default=0)
+    copy_count = models.IntegerField(default=0)
 
     def __str__(self):
         return self.command

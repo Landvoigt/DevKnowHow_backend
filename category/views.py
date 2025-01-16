@@ -1,6 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from .models import Category
-from .serializers import CategorySerializer
+from .models import Category, SubCategory
+from .serializers import CategorySerializer, SubCategorySerializer
 
 
 class CategoryViewSet(ModelViewSet):
@@ -9,6 +9,23 @@ class CategoryViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Category.objects.filter(active=True).prefetch_related('sub_categories')
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        instance.delete()
+
+
+class SubCategoryViewSet(ModelViewSet):
+    queryset = SubCategory.objects.all()
+    serializer_class = SubCategorySerializer
+
+    def get_queryset(self):
+        return SubCategory.objects.filter(active=True)
 
     def perform_create(self, serializer):
         serializer.save()

@@ -5,7 +5,6 @@ class Category(models.Model):
     active = models.BooleanField(default=False)
     title = models.CharField(max_length=40)
     description = models.TextField(max_length=10000, blank=True, null=True)
-
     creation_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -21,7 +20,6 @@ class SubCategory(models.Model):
     active = models.BooleanField(default=False)
     title = models.CharField(max_length=40)
     description = models.TextField(max_length=10000, blank=True, null=True)
-
     creation_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
@@ -29,4 +27,4 @@ class SubCategory(models.Model):
         verbose_name_plural = "Subcategories"
 
     def __str__(self):
-        return f"{self.title} (under {self.category.title})"
+        return self.title

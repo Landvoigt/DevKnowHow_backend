@@ -15,18 +15,18 @@ activate.short_description = "Activate selected commands"
 deactivate.short_description = "Deactivate selected commands"
 
 class CommandAdmin(admin.ModelAdmin):
-    list_display = ('id', 'active', 'command', 'category', 'creation_date',)
-    list_filter = ('id', 'active', 'command', 'category', 'creation_date',)
+    list_display = ('id', 'active', 'command', 'category', 'copy_count', 'creation_date',)
+    list_filter = ('id', 'active', 'command', 'category', 'copy_count', 'creation_date',)
     list_display_links = ('command',)
     search_fields = ('command', 'category',)
     ordering = ('-creation_date',)
-    readonly_fields = ('id', 'creation_date',)
+    readonly_fields = ('id', 'creation_date', 'copy_count',)
     fieldsets = (
         (None, {
             'fields': ('id', 'active', 'command', 'category', 'sub_category', 'description',)
         }),
         ('Extra Information', {
-            'fields': ('example', 'tooltip', 'param',)
+            'fields': ('example', 'tooltip', 'copy_count',)
         }),
         ('Creation Information', {
             'fields': ('creation_date', 'creator_name', 'creator_email', 'creator_message',)
