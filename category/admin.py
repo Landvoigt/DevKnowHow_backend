@@ -19,15 +19,15 @@ activate.short_description = "Activate selected categories"
 deactivate.short_description = "Deactivate selected categories"
 
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'active', 'title', 'description', 'creation_date',)
-    list_filter = ('id', 'active', 'title', 'description', 'creation_date',)
+    list_display = ('id', 'active', 'title', 'description', 'type', 'creation_date',)
+    list_filter = ('id', 'active', 'title', 'description', 'type', 'creation_date',)
     list_display_links = ('title',)
     search_fields = ('title',)
     ordering = ('-creation_date',)
     readonly_fields = ('id', 'creation_date',)
     fieldsets = (
         (None, {
-            'fields': ('id', 'active', 'title', 'description',)
+            'fields': ('id', 'active', 'title', 'description', 'type',)
         }),
         ('Creation Information', {
             'fields': ('creation_date',)

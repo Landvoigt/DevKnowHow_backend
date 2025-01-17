@@ -21,7 +21,7 @@ class CategorySerializer(serializers.ModelSerializer):
     sub_categories = serializers.SerializerMethodField()
     class Meta:
         model = Category
-        fields = ['id', 'active', 'title', 'description', 'sub_categories', 'creation_date']
+        fields = ['id', 'active', 'title', 'description', 'type', 'sub_categories', 'creation_date']
         read_only_fields = ["active", "creation_date"]
 
     def get_sub_categories(self, obj):
