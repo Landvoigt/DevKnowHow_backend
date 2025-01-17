@@ -1,14 +1,14 @@
 from rest_framework import serializers
 from category.models import Category, SubCategory
-from .models import Command
+from .models import Routine
 
 
-class CommandSerializer(serializers.ModelSerializer):
+class RoutineSerializer(serializers.ModelSerializer):
     category = serializers.CharField()
     sub_category = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
-        model = Command
+        model = Routine
         fields = '__all__'
         read_only_fields = ["active", "creation_date"]
 

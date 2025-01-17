@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # apps
     'category',
     'command',
+    'routine',
 
     # other
     "corsheaders",

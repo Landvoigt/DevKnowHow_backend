@@ -1,6 +1,6 @@
 from django.contrib import admin
-
 from .models import Category, SubCategory
+
 
 class SubCategoryInline(admin.TabularInline):
     model = SubCategory

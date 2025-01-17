@@ -1,6 +1,7 @@
 from django.test import TestCase
 from .models import Category, SubCategory
 
+
 class CategoryDeletionTest(TestCase):
     def test_subcategory_deletion_on_category_delete(self):
         category = Category.objects.create(title="Test Category")

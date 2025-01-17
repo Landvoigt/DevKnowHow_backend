@@ -1,6 +1,7 @@
 from django.utils import timezone
 from django.db import models
 
+
 class Category(models.Model):
     TYPE_CHOICES = [
         ('command', 'Command'),
