@@ -14,15 +14,15 @@ activate.short_description = "Activate selected routines"
 deactivate.short_description = "Deactivate selected routines"
 
 class RoutineAdmin(admin.ModelAdmin):
-    list_display = ('id', 'active', 'routine', 'category', 'sub_category', 'copy_count', 'creation_date',)
-    list_filter = ('id', 'active', 'routine', 'category', 'sub_category', 'copy_count', 'creation_date',)
-    list_display_links = ('routine',)
-    search_fields = ('routine', 'category','sub_category',)
+    list_display = ('id', 'active', 'title', 'routine', 'category', 'sub_category', 'copy_count', 'creation_date',)
+    list_filter = ('id', 'active', 'title', 'routine', 'category', 'sub_category', 'copy_count', 'creation_date',)
+    list_display_links = ('title',)
+    search_fields = ('title', 'routine', 'category','sub_category',)
     ordering = ('-creation_date',)
     readonly_fields = ('id', 'creation_date', 'copy_count',)
     fieldsets = (
         (None, {
-            'fields': ('id', 'active', 'routine', 'category', 'sub_category',)
+            'fields': ('id', 'active', 'title', 'routine', 'category', 'sub_category',)
         }),
         ('Extra Information', {
             'fields': ('example', 'tooltip', 'copy_count',)
