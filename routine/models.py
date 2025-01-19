@@ -6,7 +6,7 @@ from category.models import Category, SubCategory
 class Routine(models.Model):
     active = models.BooleanField(default=False)
     title = models.CharField(max_length=255)
-    routine = models.CharField(max_length=30000)
+    routine = models.TextField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="routine")
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="routine", blank=True, null=True)
     example = models.CharField(max_length=2000, blank=True, null=True)
@@ -20,7 +20,7 @@ class Routine(models.Model):
     copy_count = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.command
+        return self.title
     
     def increment_copy_count(self):
         self.copy_count += 1
