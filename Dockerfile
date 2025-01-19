@@ -13,8 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-ENV DJANGO_SETTINGS_MODULE=knowledge_base.settings
+ENV DJANGO_SETTINGS_MODULE=devknowhow.settings
 ENV PYTHONUNBUFFERED=1
 ENV DEBUG=False
 
-ENTRYPOINT ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn knowledge_base.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
+ENTRYPOINT ["sh", "-c", "python manage.py collectstatic --noinput && gunicorn devknowhow.wsgi:application --bind 0.0.0.0:8000 --workers 3"]
