@@ -1,3 +1,5 @@
+import re
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, ModelViewSet
@@ -7,13 +9,19 @@ from .models import Routine
 from .serializers import RoutineSerializer
 
 
-class RoutineViewSet(ModelViewSet):
-    queryset = Routine.objects.all()
+class BaseRoutineViewSet(ModelViewSet):
     serializer_class = RoutineSerializer
 
-    def get_queryset(self):
-        return Category.objects.filter(active=True)
-
+    def apply_search_filter(self, queryset):
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            cleaned_query = search_query.replace('*', '')
+            queryset = queryset.filter(
+                Q(title__iregex=rf'{re.escape(cleaned_query)}') |
+                Q(routine__iregex=rf'{re.escape(cleaned_query)}')
+            )
+        return queryset
+    
     def perform_create(self, serializer):
         serializer.save()
 
@@ -22,11 +30,17 @@ class RoutineViewSet(ModelViewSet):
 
     def perform_destroy(self, instance):
         instance.delete()
+    
+
+class RoutineViewSet(BaseRoutineViewSet):
+    queryset = Routine.objects.all()
+
+    def get_queryset(self):
+        queryset = Routine.objects.filter(active=True)
+        return self.apply_search_filter(queryset)
 
 
-class RoutinesByCategoryViewSet(ModelViewSet):
-    serializer_class = RoutineSerializer
-
+class RoutinesByCategoryViewSet(BaseRoutineViewSet):
     def get_queryset(self):
         category_id = self.kwargs['category_id']
         try:
@@ -34,13 +48,14 @@ class RoutinesByCategoryViewSet(ModelViewSet):
         except Category.DoesNotExist:
             return Routine.objects.none()
 
-        return Routine.objects.filter(category=category, active=True)
+        queryset = Routine.objects.filter(category=category, active=True)
+        return self.apply_search_filter(queryset)
     
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-    
+
 
 class RoutineCopyIncrementViewSet(ViewSet):
     @action(detail=True, methods=['post'])

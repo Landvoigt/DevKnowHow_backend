@@ -1,3 +1,5 @@
+import re
+from django.db.models import Q
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, ModelViewSet
@@ -7,13 +9,19 @@ from .models import Command
 from .serializers import CommandSerializer
 
 
-class CommandViewSet(ModelViewSet):
-    queryset = Command.objects.all()
+class BaseCommandViewSet(ModelViewSet):
     serializer_class = CommandSerializer
 
-    def get_queryset(self):
-        return Category.objects.filter(active=True)
-
+    def apply_search_filter(self, queryset):
+        search_query = self.request.query_params.get('search', None)
+        if search_query:
+            cleaned_query = search_query.replace('*', '')
+            queryset = queryset.filter(
+                Q(command__iregex=rf'{re.escape(cleaned_query)}') |
+                Q(description__iregex=rf'{re.escape(cleaned_query)}')
+            )
+        return queryset
+    
     def perform_create(self, serializer):
         serializer.save()
 
@@ -22,11 +30,17 @@ class CommandViewSet(ModelViewSet):
 
     def perform_destroy(self, instance):
         instance.delete()
+    
+
+class CommandViewSet(BaseCommandViewSet):
+    queryset = Command.objects.all()
+
+    def get_queryset(self):
+        queryset = Command.objects.filter(active=True)
+        return self.apply_search_filter(queryset)
 
 
-class CommandsByCategoryViewSet(ModelViewSet):
-    serializer_class = CommandSerializer
-
+class CommandsByCategoryViewSet(BaseCommandViewSet):
     def get_queryset(self):
         category_id = self.kwargs['category_id']
         try:
@@ -34,7 +48,8 @@ class CommandsByCategoryViewSet(ModelViewSet):
         except Category.DoesNotExist:
             return Command.objects.none()
 
-        return Command.objects.filter(category=category, active=True)
+        queryset = Command.objects.filter(category=category, active=True)
+        return self.apply_search_filter(queryset)
     
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
