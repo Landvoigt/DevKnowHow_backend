@@ -28,9 +28,10 @@ def github_webhook(request):
 
         try:
             django_container_name = "django_app"
+            project_path = "/srv/projects/devknowhow/devknowhow_backend"
             host_project_path = "/srv/projects/devknowhow"
             
-            subprocess.run(['docker', 'exec', django_container_name, 'bash', '-c', 'git pull'], check=True)
+            subprocess.run(['git', 'pull'], cwd=project_path, check=True)
             
             subprocess.run(['docker', 'exec', django_container_name, 'bash', '-c', 'python manage.py makemigrations'], check=True)
             subprocess.run(['docker', 'exec', django_container_name, 'bash', '-c', 'python manage.py migrate'], check=True)
