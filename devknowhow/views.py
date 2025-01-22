@@ -34,11 +34,11 @@ def github_webhook(request):
 
         try:
             django_container_name = "django_app"
-            project_path = "/srv/projects/devknowhow/devknowhow_backend"
-            host_project_path = "/srv/projects/devknowhow"
+            project_path = "/app"
+            host_project_path = "/test"
             
             logger.info('Running git pull...')
-            subprocess.run(['git', 'pull'], cwd=project_path, check=True)
+            subprocess.run(['/usr/bin/git', 'pull'], cwd=project_path, check=True)
             
             logger.info('Stopping and restarting docker containers...')
             subprocess.run(['docker-compose', 'down'], cwd=host_project_path, check=True)
