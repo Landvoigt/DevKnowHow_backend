@@ -33,11 +33,11 @@ def github_webhook(request):
             
             subprocess.run(['git', 'pull'], cwd=project_path, check=True)
             
-            subprocess.run(['docker', 'exec', django_container_name, 'bash', '-c', 'python manage.py makemigrations'], check=True)
-            subprocess.run(['docker', 'exec', django_container_name, 'bash', '-c', 'python manage.py migrate'], check=True)
-
             subprocess.run(['docker-compose', 'down'], cwd=host_project_path, check=True)
             subprocess.run(['docker-compose', 'up', '-d'], cwd=host_project_path, check=True)
+
+            subprocess.run(['docker', 'exec', django_container_name, 'bash', '-c', 'python manage.py makemigrations'], check=True)
+            subprocess.run(['docker', 'exec', django_container_name, 'bash', '-c', 'python manage.py migrate'], check=True)
             
             return JsonResponse({'status': 'success'})
         
