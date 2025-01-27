@@ -9,6 +9,12 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN git config --global --add safe.directory /app
+
+RUN mkdir -p /root/.ssh && \
+    ssh-keyscan github.com >> /root/.ssh/known_hosts && \
+    echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
