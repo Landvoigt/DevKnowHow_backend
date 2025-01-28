@@ -18,6 +18,7 @@ class Routine(models.Model):
     creator_message = models.CharField(max_length=10000, blank=True, null=True)
 
     copy_count = models.IntegerField(default=0)
+    test = models.CharField(max_length=10, blank=True, null=True, default='')
 
     def __str__(self):
         return self.title
