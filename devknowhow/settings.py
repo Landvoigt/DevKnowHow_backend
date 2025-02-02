@@ -30,7 +30,9 @@ ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
     "server-timvoigt.ch",
-    "www.server-timvoigt.ch"
+    "www.server-timvoigt.ch",
+    "timvoigt.ch",
+    "devknowhow.timvoigt.ch",
 ]
 
 
@@ -75,6 +77,7 @@ CSRF_TRUSTED_ORIGINS = [
   'http://localhost:8000',
   'http://localhost:4200',
   'https://server-timvoigt.ch',
+  'https://devknowhow.timvoigt.ch',
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -84,6 +87,7 @@ CORS_ALLOWED_ORIGINS = [
   'http://localhost:8000',
   'http://localhost:4200',
   'https://server-timvoigt.ch',
+  'https://devknowhow.timvoigt.ch',
 ]
 
 ROOT_URLCONF = 'devknowhow.urls'
