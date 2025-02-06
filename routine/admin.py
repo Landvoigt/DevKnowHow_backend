@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 from .models import Routine
 
 
@@ -13,7 +14,7 @@ def deactivate(modeladmin, request, queryset):
 activate.short_description = "Activate selected routines"
 deactivate.short_description = "Deactivate selected routines"
 
-class RoutineAdmin(admin.ModelAdmin):
+class RoutineAdmin(TranslationAdmin):
     list_display = ('id', 'active', 'title', 'routine', 'category', 'sub_category', 'copy_count', 'creation_date',)
     list_filter = ('id', 'active', 'title', 'routine', 'category', 'sub_category', 'copy_count', 'creation_date',)
     list_display_links = ('title',)

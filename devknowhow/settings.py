@@ -16,15 +16,19 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "server-timvoigt.ch",
-    "www.server-timvoigt.ch",
-    "timvoigt.ch",
-    "devknowhow.timvoigt.ch",
+    'localhost',
+    '127.0.0.1',
+    'server-timvoigt.ch',
+    'www.server-timvoigt.ch',
+    'timvoigt.ch',
+    'devknowhow.timvoigt.ch',
 ]
 
 INSTALLED_APPS = [
+    # other
+    'corsheaders',
+    'modeltranslation',
+
     # django
     'django.contrib.admin',
     'django.contrib.auth',
@@ -34,15 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # rest-framework
-    "rest_framework",
+    'rest_framework',
 
     # apps
     'category',
     'command',
     'routine',
-
-    # other
-    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -119,3 +120,9 @@ STATIC_URL = '/static/devknowhow/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+gettext = lambda s: s
+LANGUAGES = (
+    ('en', gettext('English')),
+    ('de', gettext('German')),
+)

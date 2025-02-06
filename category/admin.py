@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 from .models import Category, SubCategory
 
 
@@ -18,7 +19,7 @@ def deactivate(modeladmin, request, queryset):
 activate.short_description = "Activate selected categories"
 deactivate.short_description = "Deactivate selected categories"
 
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(TranslationAdmin):
     list_display = ('id', 'active', 'title', 'description', 'type', 'creation_date',)
     list_filter = ('id', 'active', 'title', 'description', 'type', 'creation_date',)
     list_display_links = ('title',)

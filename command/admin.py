@@ -1,4 +1,5 @@
 from django.contrib import admin
+from modeltranslation.admin import TranslationAdmin
 from .models import Command
 
 
@@ -13,7 +14,7 @@ def deactivate(modeladmin, request, queryset):
 activate.short_description = "Activate selected commands"
 deactivate.short_description = "Deactivate selected commands"
 
-class CommandAdmin(admin.ModelAdmin):
+class CommandAdmin(TranslationAdmin):
     list_display = ('id', 'active', 'command', 'category', 'sub_category', 'copy_count', 'creation_date',)
     list_filter = ('id', 'active', 'command', 'category', 'sub_category', 'copy_count', 'creation_date',)
     list_display_links = ('command',)
