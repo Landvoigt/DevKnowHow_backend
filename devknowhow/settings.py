@@ -73,6 +73,7 @@ CORS_ALLOWED_ORIGINS = [
   'http://localhost:8000',
   'https://timvoigt.ch',
   'https://devknowhow.timvoigt.ch',
+  "https://server-timvoigt.ch",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
