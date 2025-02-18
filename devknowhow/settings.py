@@ -18,6 +18,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    '212.227.161.51',
+    '212.227.161.51:8000',
     'server-timvoigt.ch',
     'www.server-timvoigt.ch',
     'timvoigt.ch',
