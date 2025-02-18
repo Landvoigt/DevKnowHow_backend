@@ -1,5 +1,6 @@
 import re
 from django.db.models import Q
+from django.utils.translation import activate
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, ModelViewSet
@@ -38,6 +39,14 @@ class CommandViewSet(BaseCommandViewSet):
     def get_queryset(self):
         queryset = Command.objects.filter(active=True)
         return self.apply_search_filter(queryset)
+    
+    def list(self, request, *args, **kwargs):
+        lang = request.headers.get("Accept-Language", "en")
+        activate(lang)
+        
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class CommandsByCategoryViewSet(BaseCommandViewSet):
@@ -52,6 +61,9 @@ class CommandsByCategoryViewSet(BaseCommandViewSet):
         return self.apply_search_filter(queryset)
     
     def list(self, request, *args, **kwargs):
+        lang = request.headers.get("Accept-Language", "en")
+        activate(lang)
+
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)

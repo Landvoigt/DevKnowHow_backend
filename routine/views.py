@@ -1,5 +1,6 @@
 import re
 from django.db.models import Q
+from django.utils.translation import activate
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, ModelViewSet
@@ -39,6 +40,14 @@ class RoutineViewSet(BaseRoutineViewSet):
         queryset = Routine.objects.filter(active=True)
         return self.apply_search_filter(queryset)
 
+    def list(self, request, *args, **kwargs):
+        lang = request.headers.get("Accept-Language", "en")
+        activate(lang)
+        
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
 
 class RoutinesByCategoryViewSet(BaseRoutineViewSet):
     def get_queryset(self):
@@ -52,6 +61,9 @@ class RoutinesByCategoryViewSet(BaseRoutineViewSet):
         return self.apply_search_filter(queryset)
     
     def list(self, request, *args, **kwargs):
+        lang = request.headers.get("Accept-Language", "en")
+        activate(lang)
+
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
