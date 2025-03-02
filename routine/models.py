@@ -5,8 +5,8 @@ from category.models import Category, SubCategory
 
 class Routine(models.Model):
     active = models.BooleanField(default=False)
-    title = models.CharField(max_length=255)
-    routine = models.TextField()
+    title = models.CharField(max_length=255, blank=True, null=True)
+    routine = models.TextField(blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="routine")
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="routine", blank=True, null=True)
     example = models.CharField(max_length=2000, blank=True, null=True)

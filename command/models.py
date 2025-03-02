@@ -5,10 +5,10 @@ from category.models import Category, SubCategory
 
 class Command(models.Model):
     active = models.BooleanField(default=False)
-    command = models.CharField(max_length=2000)
+    command = models.CharField(max_length=2000, blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="command")
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="command", blank=True, null=True)
-    description = models.TextField(max_length=10000)
+    description = models.TextField(max_length=10000, blank=True, null=True)
     example = models.CharField(max_length=2000, blank=True, null=True)
     tooltip = models.CharField(max_length=1000, blank=True, null=True)
     

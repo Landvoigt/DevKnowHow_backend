@@ -10,7 +10,7 @@ class Category(models.Model):
     ]
 
     active = models.BooleanField(default=False)
-    title = models.CharField(max_length=40)
+    title = models.CharField(max_length=40, blank=True, null=True)
     description = models.TextField(max_length=10000, blank=True, null=True)
     type = models.CharField(max_length=10, choices=TYPE_CHOICES, default='command')
     creation_date = models.DateTimeField(default=timezone.now)
@@ -26,7 +26,7 @@ class Category(models.Model):
 class SubCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="sub_categories")
     active = models.BooleanField(default=False)
-    title = models.CharField(max_length=40)
+    title = models.CharField(max_length=40, blank=True, null=True)
     description = models.TextField(max_length=10000, blank=True, null=True)
     creation_date = models.DateTimeField(default=timezone.now)
 
