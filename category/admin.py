@@ -1,9 +1,9 @@
 from django.contrib import admin
-from modeltranslation.admin import TranslationAdmin
+from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
 from .models import Category, SubCategory
 
 
-class SubCategoryInline(admin.TabularInline):
+class SubCategoryInline(TranslationTabularInline):
     model = SubCategory
     extra = 1
 

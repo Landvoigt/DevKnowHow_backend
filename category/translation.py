@@ -3,10 +3,10 @@ from .models import Category, SubCategory
 
 
 class CategoryTranslationOptions(TranslationOptions):
-    fields = ('title', 'description')
+    fields = ('title', 'description',)
 
 class SubCategoryTranslationOptions(TranslationOptions):
-    fields = ('title', 'description')
+    fields = ('title', 'description',)
 
 
 translator.register(Category, CategoryTranslationOptions)
