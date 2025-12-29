@@ -18,7 +18,7 @@ class BaseCommandViewSet(ModelViewSet):
         if search_query:
             cleaned_query = search_query.replace('*', '')
             queryset = queryset.filter(
-                Q(command__iregex=rf'{re.escape(cleaned_query)}') |
+                Q(title__iregex=rf'{re.escape(cleaned_query)}') |
                 Q(description__iregex=rf'{re.escape(cleaned_query)}')
             )
         return queryset
@@ -34,11 +34,7 @@ class BaseCommandViewSet(ModelViewSet):
     
 
 class CommandViewSet(BaseCommandViewSet):
-    queryset = Command.objects.all()
-
-    def get_queryset(self):
-        queryset = Command.objects.filter(active=True)
-        return self.apply_search_filter(queryset)
+    queryset = Command.objects.filter(active=True)
     
     def list(self, request, *args, **kwargs):
         lang = request.headers.get("Accept-Language", "en")

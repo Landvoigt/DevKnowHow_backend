@@ -1,38 +1,39 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
-from .models import Category
+from .models import Option
 
 
 def activate(modeladmin, request, queryset):
     updated_count = queryset.update(active=True)
-    modeladmin.message_user(request, f"{updated_count} successfully activated categories.")
+    modeladmin.message_user(request, f"{updated_count} successfully activated options.")
 
 def deactivate(modeladmin, request, queryset):
     updated_count = queryset.update(active=False)
-    modeladmin.message_user(request, f"{updated_count} successfully deactivated categories.")
+    modeladmin.message_user(request, f"{updated_count} successfully deactivated options.")
 
-activate.short_description = "Activate selected categories"
-deactivate.short_description = "Deactivate selected categories"
+activate.short_description = "Activate selected options"
+deactivate.short_description = "Deactivate selected options"
 
-class CategoryAdmin(TranslationAdmin):
-    list_display = ('id', 'active', 'title', 'description', 'type', 'created_at',)
-    list_filter = ('id', 'active', 'title', 'description', 'type', 'created_at',)
+class OptionAdmin(TranslationAdmin):
+    list_display = ('id', 'active', 'title', 'created_at')
+    list_filter = ('id', 'active', 'title', 'created_at',)
     list_display_links = ('title',)
     search_fields = ('title',)
-    ordering = ('-created_at',)
     readonly_fields = ('id', 'created_at', 'updated_at',)
+    ordering = ('id',)
     date_hierarchy = 'created_at'
     fieldsets = (
         (None, {
             'fields': ('id', 'active',)
         }),
         ('Content', {
-            'fields': ('title', 'description', 'type',)
+            'fields': ('title', 'description',)
         }),
         ('Creation', {
             'fields': ('created_at', 'updated_at',)
         }),
     )
+    
     actions = [activate, deactivate, 'delete_selected']
 
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(Option, OptionAdmin)

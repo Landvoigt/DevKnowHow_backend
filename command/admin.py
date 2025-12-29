@@ -15,24 +15,57 @@ activate.short_description = "Activate selected commands"
 deactivate.short_description = "Deactivate selected commands"
 
 class CommandAdmin(TranslationAdmin):
-    list_display = ('id', 'active', 'command', 'category', 'sub_category', 'copy_count', 'creation_date',)
-    list_filter = ('id', 'active', 'command', 'category', 'sub_category', 'copy_count', 'creation_date',)
-    list_display_links = ('command',)
-    search_fields = ('command', 'category','sub_category',)
-    ordering = ('-creation_date',)
-    readonly_fields = ('id', 'creation_date', 'copy_count',)
+    list_display = ('id', 'active', 'title', 'category_list', 'copy_count', 'created_at',)
+    list_filter = ('id', 'active', 'title', 'copy_count', 'created_at',)
+    list_display_links = ('title',)
+    search_fields = ('title',)
+    ordering = ('-created_at',)
+    readonly_fields = ('id', 'created_at', 'updated_at', 'copy_count',)
+    date_hierarchy = 'created_at'
+    filter_horizontal = ('category', 'option', 'alternative',)
     fieldsets = (
         (None, {
-            'fields': ('id', 'active', 'command', 'category', 'sub_category', 'description',)
+            'fields': ('id', 'active', 'category',)
         }),
-        ('Extra Information', {
-            'fields': ('example', 'tooltip', 'copy_count',)
+        ('Content', {
+            'fields': ('title', 'description', 'tooltip', 'example',)
         }),
-        ('Creation Information', {
-            'fields': ('creation_date', 'creator_name', 'creator_email', 'creator_message',)
+        ('Extra', {
+            'fields': ('option', 'alternative',)
+        }),
+        ('Creation', {
+            'fields': ('created_at', 'updated_at',)
         }),
     )
 
     actions = [activate, deactivate, 'delete_selected']
+
+    def category_list(self, obj):
+        return ", ".join([c.title for c in obj.category.all()])
+    category_list.short_description = 'Category'
+
+    def category_field(self, db_field, request, **kwargs):
+        if db_field.name == "category":
+            from category.models import Category
+            categories = Category.objects.all()
+            if categories.count() == 1:
+                kwargs["initial"] = categories
+        return super().category_field(db_field, request, **kwargs)
+    
+    def option_field(self, db_field, request, **kwargs):
+        if db_field.name == "option":
+            from option.models import Option
+            options = Option.objects.all()
+            if options.count() == 1:
+                kwargs["initial"] = options
+        return super().option_field(db_field, request, **kwargs)
+    
+    def alternative_field(self, db_field, request, **kwargs):
+        if db_field.name == "alternative":
+            from .models import Command
+            alternatives = Command.objects.all()
+            if alternatives.count() == 1:
+                kwargs["initial"] = alternatives
+        return super().alternative_field(db_field, request, **kwargs)
 
 admin.site.register(Command, CommandAdmin)

@@ -1,21 +1,18 @@
-from django.utils import timezone
 from django.db import models
-from category.models import Category, SubCategory
+from category.models import Category
 
 
 class Routine(models.Model):
     active = models.BooleanField(default=False)
-    title = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    title = models.CharField(max_length=255, unique=True)
     routine = models.TextField(blank=True, null=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="routine")
-    sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="routine", blank=True, null=True)
+    category = models.ManyToManyField(Category, related_name="routines")
     example = models.CharField(max_length=2000, blank=True, null=True)
     tooltip = models.CharField(max_length=1000, blank=True, null=True)
-    
-    creation_date = models.DateTimeField(default=timezone.now)
-    creator_name = models.CharField(max_length=255, blank=True, null=True)
-    creator_email = models.CharField(max_length=255, blank=True, null=True)
-    creator_message = models.CharField(max_length=10000, blank=True, null=True)
+    alternative = models.ManyToManyField("self", symmetrical=False, related_name="alternative_to", blank=True)
 
     copy_count = models.IntegerField(default=0)
 

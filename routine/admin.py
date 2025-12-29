@@ -15,24 +15,49 @@ activate.short_description = "Activate selected routines"
 deactivate.short_description = "Deactivate selected routines"
 
 class RoutineAdmin(TranslationAdmin):
-    list_display = ('id', 'active', 'title', 'routine', 'category', 'sub_category', 'copy_count', 'creation_date',)
-    list_filter = ('id', 'active', 'title', 'routine', 'category', 'sub_category', 'copy_count', 'creation_date',)
+    list_display = ('id', 'active', 'title', 'category_list', 'copy_count', 'created_at',)
+    list_filter = ('id', 'active', 'title', 'copy_count', 'created_at',)
     list_display_links = ('title',)
-    search_fields = ('title', 'routine', 'category','sub_category',)
-    ordering = ('-creation_date',)
-    readonly_fields = ('id', 'creation_date', 'copy_count',)
+    search_fields = ('title',)
+    ordering = ('-created_at',)
+    readonly_fields = ('id', 'created_at', 'updated_at', 'copy_count',)
+    date_hierarchy = 'created_at'
+    filter_horizontal = ('category', 'alternative',)
     fieldsets = (
         (None, {
-            'fields': ('id', 'active', 'title', 'routine', 'category', 'sub_category',)
+            'fields': ('id', 'active', 'category',)
         }),
-        ('Extra Information', {
-            'fields': ('example', 'tooltip', 'copy_count',)
+        ('Content', {
+            'fields': ('title', 'routine', 'tooltip', 'example',)
         }),
-        ('Creation Information', {
-            'fields': ('creation_date', 'creator_name', 'creator_email', 'creator_message',)
+        ('Extra', {
+            'fields': ('alternative',)
+        }),
+        ('Creation', {
+            'fields': ('created_at', 'updated_at',)
         }),
     )
 
     actions = [activate, deactivate, 'delete_selected']
+
+    def category_list(self, obj):
+        return ", ".join([c.title for c in obj.category.all()])
+    category_list.short_description = 'Category'
+
+    def category_field(self, db_field, request, **kwargs):
+        if db_field.name == "category":
+            from category.models import Category
+            categories = Category.objects.all()
+            if categories.count() == 1:
+                kwargs["initial"] = categories
+        return super().category_field(db_field, request, **kwargs)
+
+    def alternative_field(self, db_field, request, **kwargs):
+        if db_field.name == "alternative":
+            from .models import Command
+            alternatives = Command.objects.all()
+            if alternatives.count() == 1:
+                kwargs["initial"] = alternatives
+        return super().alternative_field(db_field, request, **kwargs)
 
 admin.site.register(Routine, RoutineAdmin)

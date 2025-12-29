@@ -3,7 +3,7 @@ from .models import Command
 
 
 class CommandTranslationOptions(TranslationOptions):
-    fields = ('command', 'description', 'tooltip',)
+    fields = ('title', 'description', 'tooltip',)
 
 
 translator.register(Command, CommandTranslationOptions)
