@@ -1,5 +1,6 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
+from django.contrib.postgres.aggregates import StringAgg
 
 from category.models import Category
 from .models import Command
@@ -66,9 +67,20 @@ class CommandAdmin(TranslationAdmin):
 
     actions = [activate, deactivate, 'delete_selected']
 
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        return qs.annotate(
+            category_titles=StringAgg(
+                'category__title',
+                delimiter=', ',
+                ordering='category__title'
+            )
+        )
+
     def category_list(self, obj):
-        return ", ".join([c.title for c in obj.category.all()])
+        return obj.category_titles
     category_list.short_description = 'Category'
+    category_list.admin_order_field = 'category_titles'
 
     def category_field(self, db_field, request, **kwargs):
         if db_field.name == "category":

@@ -8,7 +8,7 @@ class RoutineSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Routine
-        fields = ['id', 'title', 'routine', 'category', 'example', 'tooltip', 'alternatives', 'copy_count', 'active', 'created_at', 'updated_at',]
+        fields = ['id', 'title', 'routine', 'category', 'example', 'tooltip', 'alternative', 'copy_count', 'active', 'created_at', 'updated_at',]
         read_only_fields = ['active', 'created_at', 'updated_at']
 
     def validate_category(self, value):
