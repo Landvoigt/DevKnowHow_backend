@@ -105,6 +105,12 @@ class CommandAdmin(TranslationAdmin):
             if alternatives.count() == 1:
                 kwargs["initial"] = alternatives
         return super().alternative_field(db_field, request, **kwargs)
+    
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        for alt in obj.alternative.all():
+            if obj not in alt.alternative.all():
+                alt.alternative.add(obj)
 
 for cat in Category.objects.all():
     CommandAdmin.actions.append(make_add_to_category_action(cat))

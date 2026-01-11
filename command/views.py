@@ -1,5 +1,6 @@
 import re
 from django.db.models import Q
+from django.db.models import F
 from django.utils.translation import activate
 from rest_framework import status
 from rest_framework.response import Response
@@ -71,10 +72,11 @@ class CommandCopyIncrementViewSet(ViewSet):
         try:
             command = Command.objects.get(pk=pk)
         except Command.DoesNotExist:
-            return Response({"error": f"Command with id {pk} not found."}, 
-                status=status.HTTP_404_NOT_FOUND)
+            return Response({"error": f"Command with id {pk} not found."}, status=status.HTTP_404_NOT_FOUND)
         
-        command.increment_copy_count()
+        command.copy_count = F('copy_count') + 1
+        command.save(update_fields=['copy_count'])
+
+        command.refresh_from_db()
         
-        return Response({"status": "copy count incremented", "copy_count": command.copy_count}, 
-            status=status.HTTP_200_OK)
+        return Response({"status": "copy count incremented", "copy_count": command.copy_count}, status=status.HTTP_200_OK)

@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ValidationError
 from category.models import Category
 from option.models import Option
 
@@ -20,7 +21,4 @@ class Command(models.Model):
 
     def __str__(self):
         return self.title
-    
-    def increment_copy_count(self):
-        self.copy_count += 1
-        self.save()
+        
