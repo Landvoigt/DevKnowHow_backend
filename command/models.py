@@ -1,7 +1,5 @@
 from django.db import models
-from django.forms import ValidationError
 from category.models import Category
-from option.models import Option
 
 
 class Command(models.Model):
@@ -14,7 +12,6 @@ class Command(models.Model):
     description = models.TextField(max_length=10000, blank=True, null=True)
     example = models.CharField(max_length=2000, blank=True, null=True)
     tooltip = models.CharField(max_length=1000, blank=True, null=True)
-    option = models.ManyToManyField(Option, related_name="commands", blank=True)
     alternative = models.ManyToManyField("self", symmetrical=False, related_name="alternative_to", blank=True)
     
     copy_count = models.IntegerField(default=0)

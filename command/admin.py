@@ -1,8 +1,9 @@
 from django.contrib import admin
-from modeltranslation.admin import TranslationAdmin
+from modeltranslation.admin import TranslationAdmin, TranslationTabularInline
 from django.contrib.postgres.aggregates import StringAgg
 
 from category.models import Category
+from option.models import Option
 from .models import Command
 
 
@@ -41,7 +42,14 @@ def make_remove_from_category_action(category):
     action.__name__ = f"remove_from_category_{category.id}"
     return action
 
+class OptionInline(TranslationTabularInline):
+    model = Option
+    extra = 1
+    show_change_link = True
+
 class CommandAdmin(TranslationAdmin):
+    inlines = [OptionInline]
+
     list_display = ('id', 'active', 'title', 'category_list', 'copy_count', 'created_at',)
     list_filter = ('id', 'active', 'title', 'copy_count', 'created_at',)
     list_display_links = ('title',)
@@ -49,7 +57,7 @@ class CommandAdmin(TranslationAdmin):
     ordering = ('-created_at',)
     readonly_fields = ('id', 'created_at', 'updated_at', 'copy_count',)
     date_hierarchy = 'created_at'
-    filter_horizontal = ('category', 'option', 'alternative',)
+    filter_horizontal = ('category', 'alternative',)
     fieldsets = (
         (None, {
             'fields': ('id', 'active', 'category',)
@@ -58,7 +66,7 @@ class CommandAdmin(TranslationAdmin):
             'fields': ('title', 'description', 'tooltip', 'example',)
         }),
         ('Extra', {
-            'fields': ('option', 'alternative',)
+            'fields': ('alternative',)
         }),
         ('Creation', {
             'fields': ('created_at', 'updated_at',)
@@ -66,6 +74,26 @@ class CommandAdmin(TranslationAdmin):
     )
 
     actions = [activate, deactivate, 'delete_selected']
+
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+
+        for category in Category.objects.all():
+            add_action = make_add_to_category_action(category)
+            remove_action = make_remove_from_category_action(category)
+
+            actions[add_action.__name__] = (
+                add_action,
+                add_action.__name__,
+                add_action.short_description,
+            )
+            actions[remove_action.__name__] = (
+                remove_action,
+                remove_action.__name__,
+                remove_action.short_description,
+            )
+
+        return actions
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -90,14 +118,6 @@ class CommandAdmin(TranslationAdmin):
                 kwargs["initial"] = categories
         return super().category_field(db_field, request, **kwargs)
     
-    def option_field(self, db_field, request, **kwargs):
-        if db_field.name == "option":
-            from option.models import Option
-            options = Option.objects.all()
-            if options.count() == 1:
-                kwargs["initial"] = options
-        return super().option_field(db_field, request, **kwargs)
-    
     def alternative_field(self, db_field, request, **kwargs):
         if db_field.name == "alternative":
             from .models import Command
@@ -111,9 +131,5 @@ class CommandAdmin(TranslationAdmin):
         for alt in obj.alternative.all():
             if obj not in alt.alternative.all():
                 alt.alternative.add(obj)
-
-for cat in Category.objects.all():
-    CommandAdmin.actions.append(make_add_to_category_action(cat))
-    CommandAdmin.actions.append(make_remove_from_category_action(cat))
 
 admin.site.register(Command, CommandAdmin)
