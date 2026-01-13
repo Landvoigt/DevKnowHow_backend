@@ -13,7 +13,7 @@ class Option(models.Model):
     description = models.TextField(max_length=1000, blank=True, null=True)
     level = models.IntegerField(default=0)
     combinable = models.BooleanField(default=True)
-    value = models.BooleanField(default=False)
+    value = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         unique_together = ("command", "title")
