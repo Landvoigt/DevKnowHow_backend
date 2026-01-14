@@ -44,26 +44,6 @@ class CommandViewSet(BaseCommandViewSet):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-
-class CommandsByCategoryViewSet(BaseCommandViewSet):
-    def get_queryset(self):
-        category_id = self.kwargs['category_id']
-        try:
-            category = Category.objects.get(id=category_id)
-        except Category.DoesNotExist:
-            return Command.objects.none()
-
-        queryset = Command.objects.filter(category=category, active=True)
-        return self.apply_search_filter(queryset)
-    
-    def list(self, request, *args, **kwargs):
-        lang = request.headers.get("Accept-Language", "en")
-        activate(lang)
-
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
     
 
 class CommandCopyIncrementViewSet(ViewSet):
