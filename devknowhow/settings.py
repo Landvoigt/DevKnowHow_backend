@@ -120,28 +120,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'devknowhow.wsgi.application'
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_DB'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-            'HOST': os.environ.get('POSTGRES_HOST'),
-            'PORT': os.environ.get('POSTGRES_PORT'),
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        'USER': os.environ.get('POSTGRES_USER'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+        'HOST': os.environ.get('POSTGRES_HOST'),
+        'PORT': os.environ.get('POSTGRES_PORT'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.environ.get('POSTGRES_DB_PROD'),
-            'USER': os.environ.get('POSTGRES_USER_PROD'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD_PROD'),
-            'HOST': os.environ.get('POSTGRES_HOST_PROD'),
-            'PORT': os.environ.get('POSTGRES_PORT_PROD'),
-        }
-    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
