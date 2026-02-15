@@ -9,8 +9,8 @@ class Option(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     command = models.ForeignKey(Command, on_delete=models.CASCADE, related_name="option")
-    title = models.CharField(max_length=50, unique=True)
-    description = models.TextField(max_length=1000, blank=True, null=True)
+    title = models.CharField(max_length=50)
+    description = models.CharField(max_length=1000, blank=True, null=True)
     level = models.IntegerField(default=0)
     combinable = models.BooleanField(default=True)
     value = models.CharField(max_length=50, blank=True, null=True)
