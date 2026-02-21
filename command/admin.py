@@ -63,7 +63,7 @@ class CommandAdmin(TranslationAdmin):
             'fields': ('id', 'active', 'category',)
         }),
         ('Content', {
-            'fields': ('title', 'description', 'tooltip', 'example',)
+            'fields': ('title', 'description', 'context', 'context_description', 'tooltip', 'example',)
         }),
         ('Extra', {
             'fields': ('alternative',)

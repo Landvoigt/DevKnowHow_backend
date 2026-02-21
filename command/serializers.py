@@ -15,7 +15,7 @@ class CommandSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Command
-        fields = ['id', 'title', 'category', 'description', 'example', 'tooltip', 'option', 'alternative', 'copy_count', 'active', 'created_at', 'updated_at']
+        fields = ['id', 'title', 'description', 'context', 'context_description', 'category', 'example', 'tooltip', 'option', 'alternative', 'copy_count', 'active', 'created_at', 'updated_at']
         read_only_fields = ['active', 'created_at', 'updated_at']
 
     def get_alternative(self, obj):
@@ -35,5 +35,5 @@ class CommandAlternativeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Command
-        fields = ['id', 'title', 'category', 'description', 'example', 'tooltip', 'option', 'copy_count', 'active', 'created_at', 'updated_at']
+        fields = ['id', 'title', 'description', 'context', 'context_description', 'category', 'example', 'tooltip', 'option', 'copy_count', 'active', 'created_at', 'updated_at']
         read_only_fields = ['active', 'created_at', 'updated_at']
