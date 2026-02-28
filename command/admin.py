@@ -6,6 +6,9 @@ from category.models import Category
 from option.models import Option
 from .models import Command
 
+from django import forms
+from django.contrib.postgres.forms import SplitArrayField
+
 
 def activate(modeladmin, request, queryset):
     updated_count = queryset.update(active=True)
@@ -47,7 +50,21 @@ class OptionInline(TranslationTabularInline):
     extra = 1
     show_change_link = True
 
+class CommandAdminForm(forms.ModelForm):
+    example = SplitArrayField(
+        base_field=forms.CharField(max_length=2000),
+        size=3,
+        remove_trailing_nulls=True,
+        required=False,
+    )
+
+    class Meta:
+        model = Command
+        fields = "__all__"
+
+
 class CommandAdmin(TranslationAdmin):
+    form = CommandAdminForm
     inlines = [OptionInline]
 
     list_display = ('id', 'active', 'title', 'category_list', 'copy_count', 'created_at',)

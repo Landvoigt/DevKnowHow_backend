@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 from category.models import Category
 
 
@@ -12,7 +13,7 @@ class Command(models.Model):
     context = models.CharField(max_length=50, blank=True, null=True)
     context_description = models.CharField(max_length=2000, blank=True, null=True)
     category = models.ManyToManyField(Category, related_name="commands")
-    example = models.CharField(max_length=2000, blank=True, null=True)
+    example = ArrayField(models.CharField(max_length=2000), blank=True, default=list)
     tooltip = models.CharField(max_length=1000, blank=True, null=True)
     alternative = models.ManyToManyField("self", symmetrical=False, related_name="alternative_to", blank=True)
     
