@@ -27,7 +27,7 @@ class OptionAdmin(TranslationAdmin):
             'fields': ('id', 'active',)
         }),
         ('Content', {
-            'fields': ('title', 'description',)
+            'fields': ('title', 'description', 'level', 'combinable', 'standalone', 'value',)
         }),
         ('Creation', {
             'fields': ('created_at', 'updated_at',)

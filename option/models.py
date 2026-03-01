@@ -13,6 +13,7 @@ class Option(models.Model):
     description = models.CharField(max_length=1000, blank=True, null=True)
     level = models.IntegerField(default=0)
     combinable = models.BooleanField(default=True)
+    standalone = models.BooleanField(default=False)
     value = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
