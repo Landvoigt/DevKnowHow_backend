@@ -15,10 +15,10 @@ activate.short_description = "Activate selected options"
 deactivate.short_description = "Deactivate selected options"
 
 class OptionAdmin(TranslationAdmin):
-    list_display = ('id', 'active', 'title', 'created_at')
-    list_filter = ('id', 'active', 'title', 'created_at',)
+    list_display = ('id', 'active', 'command', 'title', 'description', 'level', 'created_at')
+    list_filter = ('id', 'active', 'command', 'title', 'created_at',)
     list_display_links = ('title',)
-    search_fields = ('title',)
+    search_fields = ('command', 'title', 'description',)
     readonly_fields = ('id', 'created_at', 'updated_at',)
     ordering = ('id',)
     date_hierarchy = 'created_at'
@@ -27,7 +27,7 @@ class OptionAdmin(TranslationAdmin):
             'fields': ('id', 'active',)
         }),
         ('Content', {
-            'fields': ('title', 'description', 'level', 'combinable', 'standalone', 'value',)
+            'fields': ('command', 'title', 'description', 'level', 'combinable', 'standalone', 'value',)
         }),
         ('Creation', {
             'fields': ('created_at', 'updated_at',)
