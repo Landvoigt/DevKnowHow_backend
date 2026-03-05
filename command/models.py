@@ -8,7 +8,7 @@ class Command(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    title = models.CharField(max_length=2000, unique=True)
+    title = models.CharField(max_length=2000)
     description = models.TextField(max_length=10000, blank=True, null=True)
     context = models.CharField(max_length=50, blank=True, null=True)
     context_description = models.CharField(max_length=2000, blank=True, null=True)
