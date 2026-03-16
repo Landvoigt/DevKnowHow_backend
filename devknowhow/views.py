@@ -37,7 +37,11 @@ class SearchView(APIView):
             return Response(SearchResult([], []).to_dict())
 
         try:
-            cleaned_query = query
+            IGNORED_PREFIXES = ['sudo']
+
+            words = query.lower().split()
+            filtered_words = [w for w in words if w not in IGNORED_PREFIXES]
+            cleaned_query = " ".join(filtered_words)
 
             command_qs = Command.objects.filter(
                 active=True
