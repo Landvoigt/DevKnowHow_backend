@@ -15,7 +15,6 @@ class Option(models.Model):
     combinable = models.BooleanField(default=True)
     standalone = models.BooleanField(default=False)
     overwrite = models.BooleanField(default=False)
-    value = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         unique_together = ("command", "title")

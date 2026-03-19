@@ -3,6 +3,6 @@ from .models import Option
 
 
 class OptionTranslationOptions(TranslationOptions):
-    fields = ('title', 'description', 'value',)
+    fields = ('title', 'description',)
 
 translator.register(Option, OptionTranslationOptions)
