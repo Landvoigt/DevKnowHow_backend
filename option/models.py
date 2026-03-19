@@ -14,6 +14,7 @@ class Option(models.Model):
     level = models.IntegerField(default=0)
     combinable = models.BooleanField(default=True)
     standalone = models.BooleanField(default=False)
+    overwrite = models.BooleanField(default=False)
     value = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
