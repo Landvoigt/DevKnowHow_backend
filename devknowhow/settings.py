@@ -89,6 +89,7 @@ INSTALLED_APPS = [
     'option',
     'creator',
     'message',
+    'tag',
 ]
 
 MIDDLEWARE = [

@@ -8,6 +8,7 @@ from .models import Command
 
 from django import forms
 from django.contrib.postgres.forms import SplitArrayField
+from django.contrib.admin.widgets import FilteredSelectMultiple
 
 
 def activate(modeladmin, request, queryset):
@@ -45,10 +46,30 @@ def make_remove_from_category_action(category):
     action.__name__ = f"remove_from_category_{category.id}"
     return action
 
+class OptionInlineForm(forms.ModelForm):
+    class Meta:
+        model = Option
+        fields = "__all__"
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['category'].widget = FilteredSelectMultiple(
+            verbose_name='Categories',
+            is_stacked=False
+        )
+        if self.instance and self.instance.pk:
+            if self.instance.command_id:
+                self.fields['category'].queryset = self.instance.command.category.all()
+        elif 'command' in self.initial:
+            self.fields['category'].queryset = self.initial['command'].category.all()
+        else:
+            self.fields['category'].queryset = Category.objects.all()
+
 class OptionInline(TranslationTabularInline):
     model = Option
     extra = 1
     show_change_link = True
+    form = OptionInlineForm
 
 class CommandAdminForm(forms.ModelForm):
     example = SplitArrayField(
@@ -74,7 +95,7 @@ class CommandAdmin(TranslationAdmin):
     ordering = ('-created_at',)
     readonly_fields = ('id', 'created_at', 'updated_at', 'copy_count',)
     date_hierarchy = 'created_at'
-    filter_horizontal = ('category', 'alternative',)
+    filter_horizontal = ('category', 'alternative', 'tag',)
     fieldsets = (
         (None, {
             'fields': ('id', 'active', 'category',)
@@ -83,7 +104,7 @@ class CommandAdmin(TranslationAdmin):
             'fields': ('title', 'description', 'context', 'context_description', 'tooltip', 'example',)
         }),
         ('Extra', {
-            'fields': ('alternative',)
+            'fields': ('alternative', 'tag',)
         }),
         ('Creation', {
             'fields': ('created_at', 'updated_at',)

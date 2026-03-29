@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from category.models import Category
+from tag.models import Tag
 
 
 class Command(models.Model):
@@ -16,6 +17,7 @@ class Command(models.Model):
     example = ArrayField(models.CharField(max_length=2000), blank=True, default=list)
     tooltip = models.CharField(max_length=1000, blank=True, null=True)
     alternative = models.ManyToManyField("self", symmetrical=False, related_name="alternative_to", blank=True)
+    tag = models.ManyToManyField(Tag, blank=True, related_name="commands")
     
     copy_count = models.IntegerField(default=0)
 

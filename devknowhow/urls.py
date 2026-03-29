@@ -18,4 +18,5 @@ urlpatterns = [
     path('', include('option.urls')),
     path('', include('creator.urls')),
     path('', include('message.urls')),
+    path('', include('tag.urls')),
 ]
