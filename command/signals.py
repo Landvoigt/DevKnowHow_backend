@@ -1,4 +1,4 @@
-from django.db.models.signals import m2m_changed, post_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import Command
 
@@ -8,3 +8,9 @@ def sync_alternatives(sender, instance, created, **kwargs):
     for alt in instance.alternative.all():
         if instance.pk not in alt.alternative.values_list('pk', flat=True):
             alt.alternative.add(instance)
+
+@receiver(post_save, sender=Command)
+def sync_equivalents(sender, instance, created, **kwargs):
+    for eq in instance.equivalent.all():
+        if instance.pk not in eq.equivalent.values_list('pk', flat=True):
+            eq.equivalent.add(instance)

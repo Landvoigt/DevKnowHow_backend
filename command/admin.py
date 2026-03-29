@@ -95,7 +95,7 @@ class CommandAdmin(TranslationAdmin):
     ordering = ('-created_at',)
     readonly_fields = ('id', 'created_at', 'updated_at', 'copy_count',)
     date_hierarchy = 'created_at'
-    filter_horizontal = ('category', 'alternative', 'tag',)
+    filter_horizontal = ('category', 'alternative', 'equivalent', 'tag',)
     fieldsets = (
         (None, {
             'fields': ('id', 'active', 'category',)
@@ -104,7 +104,7 @@ class CommandAdmin(TranslationAdmin):
             'fields': ('title', 'description', 'context', 'context_description', 'tooltip', 'example',)
         }),
         ('Extra', {
-            'fields': ('alternative', 'tag',)
+            'fields': ('alternative', 'equivalent', 'tag',)
         }),
         ('Creation', {
             'fields': ('created_at', 'updated_at',)
@@ -164,10 +164,21 @@ class CommandAdmin(TranslationAdmin):
                 kwargs["initial"] = alternatives
         return super().alternative_field(db_field, request, **kwargs)
     
+    def equivalent_field(self, db_field, request, **kwargs):
+        if db_field.name == "equivalent":
+            from .models import Command
+            equivalents = Command.objects.all()
+            if equivalents.count() == 1:
+                kwargs["initial"] = equivalents
+        return super().equivalent_field(db_field, request, **kwargs)    
+    
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         for alt in obj.alternative.all():
             if obj not in alt.alternative.all():
                 alt.alternative.add(obj)
+        for eq in obj.equivalent.all():
+            if obj not in eq.equivalent.all():
+                eq.equivalent.add(obj)
 
 admin.site.register(Command, CommandAdmin)
