@@ -4,5 +4,5 @@ from .serializers import OptionSerializer
 
 
 class OptionViewSet(ModelViewSet):
-    queryset = Option.objects.filter(active=True)
+    queryset = Option.objects.filter(active=True).select_related("command").prefetch_related("category")
     serializer_class = OptionSerializer

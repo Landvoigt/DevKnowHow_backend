@@ -1,12 +1,11 @@
-import re
 from django.db.models import Q
 from django.db.models import F
+from django.db.models import Prefetch
 from django.utils.translation import activate
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet, ModelViewSet
 from rest_framework.decorators import action
-from category.models import Category
 from .models import Command
 from .serializers import CommandSerializer
 
@@ -19,8 +18,8 @@ class BaseCommandViewSet(ModelViewSet):
         if search_query:
             cleaned_query = search_query.replace('*', '')
             queryset = queryset.filter(
-                Q(title__iregex=rf'{re.escape(cleaned_query)}') |
-                Q(description__iregex=rf'{re.escape(cleaned_query)}')
+                Q(title__icontains=cleaned_query) |
+                Q(description__icontains=cleaned_query)
             )
         return queryset
     
@@ -35,7 +34,29 @@ class BaseCommandViewSet(ModelViewSet):
     
 
 class CommandViewSet(BaseCommandViewSet):
-    queryset = Command.objects.filter(active=True)
+    queryset = Command.objects.filter(
+        active=True
+    ).prefetch_related(
+        'category',
+        'tag',
+        'option',
+        Prefetch(
+            'alternative',
+            queryset=Command.objects.prefetch_related(
+                'category',
+                'tag',
+                'option',
+            )
+        ),
+        Prefetch(
+            'equivalent',
+            queryset=Command.objects.prefetch_related(
+                'category',
+                'tag',
+                'option',
+            )
+        ),
+    )
     
     def list(self, request, *args, **kwargs):
         lang = request.headers.get("Accept-Language", "en")

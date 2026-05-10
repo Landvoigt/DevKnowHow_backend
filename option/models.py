@@ -20,7 +20,17 @@ class Option(models.Model):
     overwrite = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = ("command", "title")
+        constraints = [
+            models.UniqueConstraint(
+                fields=["command", "title"],
+                name="uniq_option_command_title"
+            )
+        ]
+
+        indexes = [
+            models.Index(fields=["active"]),
+            models.Index(fields=["command", "active"]),
+        ]
 
     def __str__(self):
         return self.title

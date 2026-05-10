@@ -14,9 +14,5 @@ class CategorySerializer(serializers.ModelSerializer):
 class CategoryDetailSerializer(CategorySerializer):
     commands = CommandSerializer(many=True, read_only=True)
 
-    def get_commands(self, obj):
-        qs = obj.commands.filter(active=True)
-        return CommandSerializer(qs, many=True).data
-
     class Meta(CategorySerializer.Meta):
         fields = CategorySerializer.Meta.fields + ['commands']

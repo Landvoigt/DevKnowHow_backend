@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
+from django.contrib.postgres.indexes import GinIndex
 from category.models import Category
 from tag.models import Tag
 
@@ -21,6 +22,22 @@ class Command(models.Model):
     tag = models.ManyToManyField(Tag, blank=True, related_name="commands")
     
     copy_count = models.IntegerField(default=0)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["active"]),
+            
+            GinIndex(
+                fields=["title"],
+                name="cmd_title_trgm",
+                opclasses=["gin_trgm_ops"],
+            ),
+            GinIndex(
+                fields=["description"],
+                name="cmd_desc_trgm",
+                opclasses=["gin_trgm_ops"],
+            ),
+        ]
 
     def __str__(self):
         return self.title
