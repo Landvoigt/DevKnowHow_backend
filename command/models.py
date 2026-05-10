@@ -23,6 +23,10 @@ class Command(models.Model):
     
     copy_count = models.IntegerField(default=0)
 
+    """ 
+    Run this SQL command in your PostgreSQL database to enable the pg_trgm extension for trigram indexing:
+    CREATE EXTENSION IF NOT EXISTS pg_trgm;
+    """
     class Meta:
         indexes = [
             models.Index(fields=["active"]),
