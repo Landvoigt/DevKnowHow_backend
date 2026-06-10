@@ -171,14 +171,5 @@ class CommandAdmin(TranslationAdmin):
             if equivalents.count() == 1:
                 kwargs["initial"] = equivalents
         return super().equivalent_field(db_field, request, **kwargs)    
-    
-    def save_model(self, request, obj, form, change):
-        super().save_model(request, obj, form, change)
-        for alt in obj.alternative.all():
-            if obj not in alt.alternative.all():
-                alt.alternative.add(obj)
-        for eq in obj.equivalent.all():
-            if obj not in eq.equivalent.all():
-                eq.equivalent.add(obj)
 
 admin.site.register(Command, CommandAdmin)

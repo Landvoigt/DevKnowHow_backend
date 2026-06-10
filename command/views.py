@@ -46,7 +46,7 @@ class CommandViewSet(BaseCommandViewSet):
                 'category',
                 'tag',
                 'option',
-            )
+            ).order_by('title')
         ),
         Prefetch(
             'equivalent',
@@ -54,7 +54,7 @@ class CommandViewSet(BaseCommandViewSet):
                 'category',
                 'tag',
                 'option',
-            )
+            ).order_by('title')
         ),
     )
     
