@@ -17,8 +17,8 @@ class Command(models.Model):
     category = models.ManyToManyField(Category, related_name="commands")
     example = ArrayField(models.CharField(max_length=2000), blank=True, default=list)
     tooltip = models.CharField(max_length=1000, blank=True, null=True)
-    alternative = models.ManyToManyField("self", symmetrical=True, related_name="alternative_to", blank=True)
-    equivalent = models.ManyToManyField("self", symmetrical=True, related_name="equivalent_to", blank=True)
+    alternative = models.ManyToManyField("self", symmetrical=True, blank=True)
+    equivalent = models.ManyToManyField("self", symmetrical=True, blank=True)
     tag = models.ManyToManyField(Tag, blank=True, related_name="commands")
     
     copy_count = models.IntegerField(default=0)
